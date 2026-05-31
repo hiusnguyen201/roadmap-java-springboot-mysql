@@ -1,6 +1,6 @@
-# 📘 Roadmap Java + Spring Boot 2026
+# 📘 Roadmap Java, Spring Boot & MySQL — 2026
 
-> **Lộ trình toàn diện** từ Fresher → Senior dành cho Java Developer & Spring Boot Engineer.
+> **Lộ trình toàn diện** từ Fresher → Senior dành cho Java Developer, Spring Boot Engineer & MySQL Database.
 > Bao gồm: Định nghĩa, Ví dụ code chạy được, Link tài liệu chính thức, Câu hỏi phỏng vấn theo cấp độ.
 
 ---
@@ -10,6 +10,7 @@
 - [Phần 1 — Tổng quan Roadmap](#phần-1--tổng-quan-roadmap)
   - [1.1 Java Core Roadmap](#11-java-core-roadmap)
   - [1.2 Spring Boot Roadmap](#12-spring-boot-roadmap)
+  - [1.3 MySQL Roadmap](#13-mysql-roadmap)
 - [Phần 2 — Thẻ Khái niệm Java Core](#phần-2--thẻ-khái-niệm-java-core)
   - [Nhóm 1: Cú pháp & Kiểu dữ liệu cơ bản](#nhóm-1-cú-pháp--kiểu-dữ-liệu-cơ-bản)
   - [Nhóm 2: Lập trình hướng đối tượng (OOP)](#nhóm-2-lập-trình-hướng-đối-tượng-oop)
@@ -33,6 +34,19 @@
   - [Nhóm G: Messaging & Event-Driven](#nhóm-g-messaging--event-driven)
   - [Nhóm H: Testing trong Spring Boot](#nhóm-h-testing-trong-spring-boot)
   - [Nhóm I: DevOps & Deployment](#nhóm-i-devops--deployment)
+- [Phần 5 — Thẻ Khái niệm MySQL](#phần-5--thẻ-khái-niệm-mysql)
+  - [Database, Table & Data Types](#database-table--data-types)
+  - [CRUD Operations & Filtering](#crud-operations--filtering)
+  - [JOINs](#joins)
+  - [Indexes & Query Performance](#indexes--query-performance)
+  - [Normalization & Foreign Keys](#normalization--foreign-keys)
+  - [Transactions & ACID](#transactions--acid)
+  - [Window Functions & CTEs](#window-functions--ctes)
+  - [Stored Procedures, Triggers & Views](#stored-procedures-triggers--views)
+  - [Isolation Levels & Locking](#isolation-levels--locking)
+  - [Replication, Sharding & Partitioning](#replication-sharding--partitioning)
+  - [Performance Tuning & Monitoring](#performance-tuning--monitoring)
+  - [MySQL với Spring Boot (JPA/Hibernate)](#mysql-với-spring-boot-jpahibernate)
 - [Phần 4 — Bảng tổng hợp Phỏng vấn](#phần-4--bảng-tổng-hợp-phỏng-vấn)
 - [Tài nguyên tham khảo](#tài-nguyên-tham-khảo)
 
@@ -2533,6 +2547,1221 @@ jobs:
 
 ---
 
+---
+
+## Phần 5 — Thẻ Khái niệm MySQL
+
+### Tổng quan MySQL Roadmap
+
+```
+📘 MySQL Roadmap 2026
+├── 🟢 Cơ bản (Fresher)
+│   ├── Database & Table: CREATE, ALTER, DROP
+│   ├── Data Types (INT, VARCHAR, TEXT, DATE, DECIMAL, ENUM)
+│   ├── CRUD: INSERT, SELECT, UPDATE, DELETE
+│   ├── WHERE, ORDER BY, LIMIT, OFFSET
+│   ├── Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)
+│   ├── GROUP BY & HAVING
+│   ├── JOINs cơ bản (INNER, LEFT, RIGHT)
+│   └── Primary Key, AUTO_INCREMENT, NOT NULL, DEFAULT
+│
+├── 🔵 Trung cấp (Junior)
+│   ├── Subqueries & Derived Tables
+│   ├── UNION, INTERSECT, EXCEPT
+│   ├── Indexes (B-Tree, cách tạo, khi nào cần)
+│   ├── Foreign Keys & Referential Integrity
+│   ├── Normalization (1NF → 3NF, BCNF)
+│   ├── Views
+│   ├── Transactions (BEGIN, COMMIT, ROLLBACK)
+│   ├── ACID Properties
+│   ├── String/Date/Math Functions
+│   └── EXPLAIN cơ bản
+│
+├── 🟡 Nâng cao (Mid-level)
+│   ├── Query Optimization & EXPLAIN ANALYZE
+│   ├── Index Strategies (Composite, Covering, Prefix)
+│   ├── Stored Procedures & Functions
+│   ├── Triggers & Events
+│   ├── Window Functions (ROW_NUMBER, RANK, LAG, LEAD)
+│   ├── Common Table Expressions (CTE)
+│   ├── Isolation Levels (READ UNCOMMITTED → SERIALIZABLE)
+│   ├── Locking (Row Lock, Table Lock, Gap Lock)
+│   ├── InnoDB Architecture (Buffer Pool, Redo/Undo Log)
+│   └── JSON Data Type & JSON Functions
+│
+└── 🔴 Chuyên sâu (Senior)
+    ├── Replication (Master-Slave, Group Replication)
+    ├── Sharding Strategies
+    ├── Partitioning (RANGE, LIST, HASH, KEY)
+    ├── Performance Tuning (my.cnf, Buffer Pool sizing)
+    ├── Slow Query Log & Query Profiling
+    ├── Backup & Recovery (mysqldump, XtraBackup)
+    ├── High Availability (InnoDB Cluster, ProxySQL)
+    ├── MySQL 8.0+ Features (CTEs, Window Functions, Roles)
+    └── Monitoring & Observability (PMM, sys schema)
+```
+
+---
+
+<details>
+<summary>🟢 <strong>Database, Table & Data Types</strong></summary>
+
+### Định nghĩa
+MySQL là hệ quản trị cơ sở dữ liệu quan hệ (RDBMS) phổ biến nhất, dùng SQL để thao tác dữ liệu. Database chứa nhiều table, mỗi table gồm columns (cột, có kiểu dữ liệu) và rows (hàng, là bản ghi). Chọn đúng data type ảnh hưởng trực tiếp đến performance và storage.
+
+### Ví dụ Code
+```sql
+-- Tạo database
+CREATE DATABASE IF NOT EXISTS shop_db
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE shop_db;
+
+-- Tạo bảng với các data type phổ biến
+CREATE TABLE san_pham (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,  -- Số nguyên, tự tăng
+  ma_sp       VARCHAR(20) NOT NULL UNIQUE,              -- Chuỗi ngắn, duy nhất
+  ten         VARCHAR(255) NOT NULL,                    -- Chuỗi tối đa 255 ký tự
+  mo_ta       TEXT,                                     -- Chuỗi dài (lên đến 64KB)
+  gia         DECIMAL(12, 2) NOT NULL DEFAULT 0.00,     -- Số thập phân chính xác (tiền tệ)
+  so_luong    INT UNSIGNED NOT NULL DEFAULT 0,          -- Số nguyên không âm
+  danh_muc    ENUM('dien_tu', 'thoi_trang', 'thuc_pham', 'khac') DEFAULT 'khac',
+  is_active   TINYINT(1) NOT NULL DEFAULT 1,            -- Boolean (0/1)
+  hinh_anh    JSON,                                     -- JSON array các URL hình
+  ngay_tao    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  ngay_cap_nhat DATETIME ON UPDATE CURRENT_TIMESTAMP,
+
+  INDEX idx_danh_muc (danh_muc),                       -- Index cho filter theo danh mục
+  INDEX idx_gia (gia)                                   -- Index cho sắp xếp/lọc theo giá
+) ENGINE=InnoDB;
+
+-- Sửa bảng: thêm/xóa/đổi cột
+ALTER TABLE san_pham
+  ADD COLUMN thuong_hieu VARCHAR(100) AFTER ten,
+  ADD COLUMN trong_luong DECIMAL(8,2),
+  MODIFY COLUMN mo_ta MEDIUMTEXT,             -- Mở rộng lên 16MB
+  DROP COLUMN is_active;
+
+-- Xem cấu trúc bảng
+DESCRIBE san_pham;
+SHOW CREATE TABLE san_pham\G
+```
+
+### Hướng dẫn chọn Data Type
+
+| Loại | Data Type | Khi nào dùng | Storage |
+|------|-----------|-------------|---------|
+| Số nguyên | `TINYINT` | Trạng thái, boolean | 1 byte |
+| Số nguyên | `INT` | ID, số lượng | 4 bytes |
+| Số nguyên | `BIGINT` | ID lớn, timestamp | 8 bytes |
+| Số thập phân | `DECIMAL(M,D)` | Tiền tệ, giá cả | Biến đổi |
+| Số thập phân | `FLOAT/DOUBLE` | Khoa học, tọa độ | 4/8 bytes |
+| Chuỗi | `VARCHAR(N)` | Tên, email, mã | N + 1-2 bytes |
+| Chuỗi | `TEXT` | Mô tả, nội dung | Tối đa 64KB |
+| Ngày giờ | `DATE` | Ngày sinh, ngày tạo | 3 bytes |
+| Ngày giờ | `DATETIME` | Timestamp chính xác | 8 bytes |
+| Khác | `JSON` | Dữ liệu linh hoạt | Biến đổi |
+| Khác | `ENUM` | Danh sách giá trị cố định | 1-2 bytes |
+
+### Tài liệu tham khảo
+- [MySQL — Data Types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
+- [MySQL — CREATE TABLE](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟢 Fresher | `VARCHAR` và `TEXT` khác nhau thế nào? Khi nào dùng cái nào? |
+| 🟢 Fresher | `DECIMAL` và `FLOAT` khác nhau thế nào? Lưu tiền dùng kiểu gì? |
+| 🟢 Fresher | `utf8` và `utf8mb4` khác nhau sao? Tại sao nên dùng `utf8mb4`? |
+
+</details>
+
+---
+
+<details>
+<summary>🟢 <strong>CRUD Operations & Filtering</strong></summary>
+
+### Định nghĩa
+CRUD (Create, Read, Update, Delete) là 4 thao tác cơ bản trên dữ liệu: `INSERT` (thêm), `SELECT` (đọc), `UPDATE` (sửa), `DELETE` (xóa). Kết hợp với `WHERE`, `ORDER BY`, `LIMIT` để lọc, sắp xếp, phân trang kết quả.
+
+### Ví dụ Code
+```sql
+-- INSERT — thêm dữ liệu
+INSERT INTO san_pham (ma_sp, ten, gia, so_luong, danh_muc)
+VALUES ('SP001', 'iPhone 16 Pro', 28990000, 50, 'dien_tu');
+
+-- Insert nhiều dòng cùng lúc (performance tốt hơn insert từng dòng)
+INSERT INTO san_pham (ma_sp, ten, gia, so_luong, danh_muc) VALUES
+  ('SP002', 'Áo Polo Nam', 350000, 200, 'thoi_trang'),
+  ('SP003', 'Gạo ST25 5kg', 125000, 500, 'thuc_pham'),
+  ('SP004', 'MacBook Air M3', 27990000, 30, 'dien_tu');
+
+-- INSERT ... ON DUPLICATE KEY UPDATE (upsert)
+INSERT INTO san_pham (ma_sp, ten, gia, so_luong)
+VALUES ('SP001', 'iPhone 16 Pro', 27990000, 60)
+ON DUPLICATE KEY UPDATE
+  gia = VALUES(gia),
+  so_luong = VALUES(so_luong);
+
+-- SELECT — đọc dữ liệu
+-- Lọc + sắp xếp + phân trang
+SELECT ma_sp, ten, gia, so_luong
+FROM san_pham
+WHERE danh_muc = 'dien_tu'
+  AND gia BETWEEN 10000000 AND 30000000
+  AND ten LIKE '%iPhone%'
+ORDER BY gia DESC
+LIMIT 10 OFFSET 0;    -- Trang 1, 10 items/trang
+
+-- Aggregate Functions + GROUP BY + HAVING
+SELECT
+  danh_muc,
+  COUNT(*) AS so_san_pham,
+  AVG(gia) AS gia_trung_binh,
+  SUM(gia * so_luong) AS tong_gia_tri_ton_kho
+FROM san_pham
+GROUP BY danh_muc
+HAVING COUNT(*) >= 2    -- Chỉ lấy danh mục có >= 2 sản phẩm
+ORDER BY tong_gia_tri_ton_kho DESC;
+
+-- UPDATE — sửa dữ liệu (LUÔN có WHERE)
+UPDATE san_pham
+SET gia = gia * 0.9,                        -- Giảm giá 10%
+    ngay_cap_nhat = CURRENT_TIMESTAMP
+WHERE danh_muc = 'thoi_trang'
+  AND so_luong > 100;
+
+-- DELETE — xóa dữ liệu (LUÔN có WHERE)
+DELETE FROM san_pham
+WHERE so_luong = 0
+  AND ngay_tao < DATE_SUB(NOW(), INTERVAL 6 MONTH);
+
+-- ⚠️ Mẹo an toàn: luôn SELECT trước khi UPDATE/DELETE
+SELECT * FROM san_pham WHERE so_luong = 0;  -- Kiểm tra trước
+-- Nếu đúng rồi mới chạy DELETE
+```
+
+### Tài liệu tham khảo
+- [MySQL — SELECT Statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+- [MySQL — INSERT Statement](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟢 Fresher | `WHERE` và `HAVING` khác nhau thế nào? |
+| 🟢 Fresher | `DELETE` và `TRUNCATE` khác nhau thế nào? |
+| 🟢 Fresher | Phân trang dùng `LIMIT` và `OFFSET` — có vấn đề gì khi offset lớn? |
+| 🔵 Junior | `INSERT ... ON DUPLICATE KEY UPDATE` dùng khi nào? |
+
+</details>
+
+---
+
+<details>
+<summary>🟢 <strong>JOINs</strong></summary>
+
+### Định nghĩa
+JOIN kết hợp dữ liệu từ 2+ bảng dựa trên điều kiện liên kết. Các loại: `INNER JOIN` (chỉ dòng khớp), `LEFT JOIN` (tất cả bên trái + khớp bên phải), `RIGHT JOIN` (ngược lại), `CROSS JOIN` (tích Descartes). Hiểu JOIN là kỹ năng SQL quan trọng nhất.
+
+### Ví dụ Code
+```sql
+-- Setup bảng mẫu
+CREATE TABLE khach_hang (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ten VARCHAR(100) NOT NULL,
+  email VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE don_hang (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  khach_hang_id INT,
+  ngay_dat DATE NOT NULL,
+  tong_tien DECIMAL(12,2) NOT NULL,
+  trang_thai ENUM('cho_xac_nhan', 'dang_giao', 'da_giao', 'huy') DEFAULT 'cho_xac_nhan',
+  FOREIGN KEY (khach_hang_id) REFERENCES khach_hang(id) ON DELETE SET NULL
+);
+
+CREATE TABLE chi_tiet_don_hang (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  don_hang_id INT NOT NULL,
+  san_pham_id INT NOT NULL,
+  so_luong INT NOT NULL,
+  don_gia DECIMAL(12,2) NOT NULL,
+  FOREIGN KEY (don_hang_id) REFERENCES don_hang(id) ON DELETE CASCADE,
+  FOREIGN KEY (san_pham_id) REFERENCES san_pham(id)
+);
+
+-- INNER JOIN — chỉ lấy khách hàng CÓ đơn hàng
+SELECT
+  kh.ten AS khach_hang,
+  dh.id AS ma_don,
+  dh.tong_tien,
+  dh.trang_thai
+FROM khach_hang kh
+INNER JOIN don_hang dh ON kh.id = dh.khach_hang_id
+WHERE dh.trang_thai = 'da_giao'
+ORDER BY dh.tong_tien DESC;
+
+-- LEFT JOIN — tất cả khách hàng, kể cả chưa mua hàng
+SELECT
+  kh.ten,
+  COUNT(dh.id) AS so_don_hang,
+  COALESCE(SUM(dh.tong_tien), 0) AS tong_chi_tieu
+FROM khach_hang kh
+LEFT JOIN don_hang dh ON kh.id = dh.khach_hang_id
+GROUP BY kh.id, kh.ten
+ORDER BY tong_chi_tieu DESC;
+
+-- Multi-table JOIN — chi tiết đơn hàng đầy đủ
+SELECT
+  kh.ten AS khach_hang,
+  dh.id AS ma_don,
+  dh.ngay_dat,
+  sp.ten AS san_pham,
+  ct.so_luong,
+  ct.don_gia,
+  (ct.so_luong * ct.don_gia) AS thanh_tien
+FROM chi_tiet_don_hang ct
+INNER JOIN don_hang dh ON ct.don_hang_id = dh.id
+INNER JOIN khach_hang kh ON dh.khach_hang_id = kh.id
+INNER JOIN san_pham sp ON ct.san_pham_id = sp.id
+WHERE dh.ngay_dat >= '2026-01-01'
+ORDER BY dh.ngay_dat DESC, dh.id;
+
+-- Self JOIN — tìm sản phẩm cùng danh mục, giá tương đương
+SELECT
+  a.ten AS san_pham_1,
+  b.ten AS san_pham_2,
+  a.gia,
+  a.danh_muc
+FROM san_pham a
+INNER JOIN san_pham b ON a.danh_muc = b.danh_muc
+  AND a.id < b.id
+  AND ABS(a.gia - b.gia) < 1000000;
+```
+
+### Tài liệu tham khảo
+- [MySQL — JOIN Clause](https://dev.mysql.com/doc/refman/8.0/en/join.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟢 Fresher | Phân biệt `INNER JOIN`, `LEFT JOIN`, `RIGHT JOIN`? |
+| 🟢 Fresher | `ON` và `WHERE` trong JOIN khác nhau thế nào? |
+| 🔵 Junior | Self JOIN là gì? Cho ví dụ thực tế? |
+| 🔵 Junior | `CROSS JOIN` dùng khi nào? |
+
+</details>
+
+---
+
+<details>
+<summary>🔵 <strong>Indexes & Query Performance</strong></summary>
+
+### Định nghĩa
+Index là cấu trúc dữ liệu (thường là B+Tree) giúp MySQL tìm kiếm nhanh mà không cần quét toàn bộ bảng (Full Table Scan). Index đúng cải thiện SELECT gấp 10-1000x, nhưng làm chậm INSERT/UPDATE. `EXPLAIN` là công cụ quan trọng nhất để phân tích query performance.
+
+### Ví dụ Code
+```sql
+-- Tạo các loại index
+-- Single-column index
+CREATE INDEX idx_email ON khach_hang(email);
+
+-- Composite index — THỨ TỰ CỘT RẤT QUAN TRỌNG (leftmost prefix rule)
+CREATE INDEX idx_danh_muc_gia ON san_pham(danh_muc, gia);
+-- ✅ Dùng được: WHERE danh_muc = 'dien_tu'
+-- ✅ Dùng được: WHERE danh_muc = 'dien_tu' AND gia > 1000000
+-- ❌ KHÔNG dùng được: WHERE gia > 1000000 (bỏ qua cột đầu tiên)
+
+-- Covering index — index chứa tất cả cột cần, không cần đọc table
+CREATE INDEX idx_covering ON san_pham(danh_muc, gia, ten);
+-- Query sau chỉ đọc index, không truy cập table (Using index)
+-- SELECT ten, gia FROM san_pham WHERE danh_muc = 'dien_tu' ORDER BY gia;
+
+-- Prefix index — cho cột VARCHAR dài
+CREATE INDEX idx_ten_prefix ON san_pham(ten(50)); -- chỉ index 50 ký tự đầu
+
+-- EXPLAIN — phân tích query plan
+EXPLAIN SELECT * FROM san_pham WHERE danh_muc = 'dien_tu' AND gia > 1000000;
+-- Kết quả quan trọng:
+-- type:   ALL (full scan) → range → ref → eq_ref → const (tốt nhất)
+-- key:    index nào được dùng (NULL = không dùng index)
+-- rows:   số dòng ước tính phải quét
+-- Extra:  Using where, Using index (covering), Using filesort (chậm)
+
+-- EXPLAIN ANALYZE — chạy thực tế, cho thời gian thật (MySQL 8.0+)
+EXPLAIN ANALYZE
+SELECT kh.ten, COUNT(dh.id) AS so_don
+FROM khach_hang kh
+LEFT JOIN don_hang dh ON kh.id = dh.khach_hang_id
+GROUP BY kh.id;
+
+-- Kiểm tra index hiện có
+SHOW INDEX FROM san_pham;
+
+-- Xóa index không cần thiết (index thừa làm chậm write)
+DROP INDEX idx_ten_prefix ON san_pham;
+
+-- ⚠️ Những thao tác PHÁ INDEX (index không được sử dụng)
+-- ❌ Dùng function trên cột: WHERE YEAR(ngay_tao) = 2026
+-- ✅ Sửa thành:              WHERE ngay_tao >= '2026-01-01' AND ngay_tao < '2027-01-01'
+-- ❌ Implicit type conversion: WHERE ma_sp = 123  (ma_sp là VARCHAR)
+-- ✅ Sửa thành:                WHERE ma_sp = '123'
+-- ❌ LIKE bắt đầu bằng %:     WHERE ten LIKE '%iPhone%'
+-- ✅ Dùng Full-Text Search:    WHERE MATCH(ten) AGAINST('iPhone')
+```
+
+### Tài liệu tham khảo
+- [MySQL — Optimization and Indexes](https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html)
+- [MySQL — EXPLAIN Output Format](https://dev.mysql.com/doc/refman/8.0/en/explain-output.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🔵 Junior | Index là gì? Tại sao không đánh index tất cả cột? |
+| 🔵 Junior | Composite index và leftmost prefix rule là gì? |
+| 🟡 Mid | Covering index là gì? Tại sao nhanh hơn index thường? |
+| 🟡 Mid | Đọc EXPLAIN output: `type`, `key`, `rows`, `Extra` có ý nghĩa gì? |
+| 🔴 Senior | Khi nào MySQL chọn Full Table Scan thay vì dùng index? |
+
+</details>
+
+---
+
+<details>
+<summary>🔵 <strong>Normalization & Foreign Keys</strong></summary>
+
+### Định nghĩa
+**Normalization** là quá trình thiết kế database giảm dư thừa dữ liệu, chia thành các mức: 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies). **Foreign Key** tạo ràng buộc tham chiếu giữa các bảng, đảm bảo tính toàn vẹn dữ liệu (Referential Integrity).
+
+### Ví dụ Code
+```sql
+-- ❌ CHƯA chuẩn hóa — vi phạm 1NF (cột chứa nhiều giá trị)
+-- | id | ten     | so_dt                    | san_pham_da_mua     |
+-- | 1  | Lan     | 0901234567, 0912345678   | iPhone, MacBook, Áo |
+
+-- ✅ Chuẩn hóa: tách thành nhiều bảng
+
+-- Bảng khách hàng (1 khách hàng = 1 dòng)
+CREATE TABLE khach_hang (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ten VARCHAR(100) NOT NULL
+);
+
+-- Bảng số điện thoại (1 số = 1 dòng, FK về khách hàng)
+CREATE TABLE so_dien_thoai (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  khach_hang_id INT NOT NULL,
+  so_dt VARCHAR(15) NOT NULL,
+  loai ENUM('chinh', 'phu') DEFAULT 'chinh',
+  FOREIGN KEY (khach_hang_id) REFERENCES khach_hang(id)
+    ON DELETE CASCADE     -- Xóa khách → xóa luôn số ĐT
+    ON UPDATE CASCADE     -- Sửa id khách → cập nhật FK
+);
+
+-- Foreign Key actions:
+-- CASCADE:    thay đổi/xóa theo parent
+-- SET NULL:   đặt FK = NULL khi parent bị xóa
+-- RESTRICT:   CHẶN xóa/sửa parent nếu còn child (mặc định)
+-- SET DEFAULT: đặt FK = giá trị mặc định (InnoDB không hỗ trợ)
+
+-- Bảng trung gian cho quan hệ N-N (Many-to-Many)
+CREATE TABLE don_hang_san_pham (
+  don_hang_id INT NOT NULL,
+  san_pham_id INT NOT NULL,
+  so_luong INT NOT NULL DEFAULT 1,
+  don_gia DECIMAL(12,2) NOT NULL,
+  PRIMARY KEY (don_hang_id, san_pham_id),  -- Composite PK
+  FOREIGN KEY (don_hang_id) REFERENCES don_hang(id) ON DELETE CASCADE,
+  FOREIGN KEY (san_pham_id) REFERENCES san_pham(id) ON DELETE RESTRICT
+);
+
+-- Kiểm tra FK constraints
+SELECT
+  TABLE_NAME, COLUMN_NAME,
+  REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME,
+  DELETE_RULE, UPDATE_RULE
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE TABLE_SCHEMA = 'shop_db'
+  AND REFERENCED_TABLE_NAME IS NOT NULL;
+```
+
+### Tóm tắt Normalization
+
+| Mức | Yêu cầu | Ví dụ vi phạm |
+|-----|---------|--------------|
+| 1NF | Mỗi cột chỉ chứa 1 giá trị atomic | Cột `so_dt` chứa "0901..., 0912..." |
+| 2NF | Đạt 1NF + không partial dependency | Cột `ten_sp` phụ thuộc vào `san_pham_id`, không phải toàn bộ PK |
+| 3NF | Đạt 2NF + không transitive dependency | Cột `ten_tinh` phụ thuộc vào `ma_tinh`, không phải PK |
+
+### Tài liệu tham khảo
+- [MySQL — Foreign Key Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟢 Fresher | Primary Key và Foreign Key khác nhau thế nào? |
+| 🔵 Junior | Giải thích 1NF, 2NF, 3NF? Cho ví dụ? |
+| 🔵 Junior | `ON DELETE CASCADE` vs `ON DELETE SET NULL` — khi nào dùng cái nào? |
+| 🟡 Mid | Khi nào nên denormalize (phi chuẩn hóa)? Trade-off là gì? |
+
+</details>
+
+---
+
+<details>
+<summary>🔵 <strong>Transactions & ACID</strong></summary>
+
+### Định nghĩa
+**Transaction** là một nhóm câu lệnh SQL được thực thi như một đơn vị nguyên tử — hoặc tất cả thành công (COMMIT), hoặc tất cả rollback. **ACID**: Atomicity (nguyên tử), Consistency (nhất quán), Isolation (cô lập), Durability (bền vững). InnoDB là engine duy nhất của MySQL hỗ trợ transaction đầy đủ.
+
+### Ví dụ Code
+```sql
+-- Transaction cơ bản: chuyển tiền giữa 2 tài khoản
+START TRANSACTION;
+
+-- Trừ tiền người gửi
+UPDATE tai_khoan
+SET so_du = so_du - 5000000
+WHERE id = 1 AND so_du >= 5000000;  -- Kiểm tra đủ tiền
+
+-- Kiểm tra có update thành công không
+-- Nếu ROW_COUNT() = 0 → không đủ tiền → ROLLBACK
+-- (Trong application code, kiểm tra affected rows)
+
+-- Cộng tiền người nhận
+UPDATE tai_khoan
+SET so_du = so_du + 5000000
+WHERE id = 2;
+
+-- Ghi log giao dịch
+INSERT INTO lich_su_giao_dich (tu_tk, den_tk, so_tien, ngay)
+VALUES (1, 2, 5000000, NOW());
+
+COMMIT;  -- Tất cả thành công → lưu vĩnh viễn
+
+-- Nếu có lỗi ở bất kỳ bước nào:
+-- ROLLBACK;  -- Hủy tất cả thay đổi
+
+-- SAVEPOINT — rollback từng phần
+START TRANSACTION;
+
+INSERT INTO don_hang (khach_hang_id, tong_tien) VALUES (1, 1000000);
+SAVEPOINT after_order;
+
+INSERT INTO chi_tiet_don_hang (don_hang_id, san_pham_id, so_luong, don_gia)
+VALUES (LAST_INSERT_ID(), 999, 1, 1000000);
+-- Nếu sản phẩm 999 không tồn tại → lỗi FK
+ROLLBACK TO after_order;  -- Chỉ rollback chi tiết, giữ đơn hàng
+
+COMMIT;
+
+-- Kiểm tra isolation level hiện tại
+SELECT @@transaction_isolation;
+-- Mặc định: REPEATABLE-READ (InnoDB)
+
+-- Thay đổi isolation level cho session
+SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+### ACID giải thích
+
+| Thuộc tính | Ý nghĩa | Ví dụ |
+|-----------|---------|-------|
+| **Atomicity** | Tất cả hoặc không gì cả | Chuyển tiền: trừ A + cộng B phải cùng thành công |
+| **Consistency** | DB luôn ở trạng thái hợp lệ | Tổng tiền 2 tài khoản không đổi sau chuyển khoản |
+| **Isolation** | Transaction song song không ảnh hưởng nhau | 2 người cùng mua SP cuối, chỉ 1 người thành công |
+| **Durability** | Dữ liệu đã COMMIT không bao giờ mất | Server crash sau COMMIT → dữ liệu vẫn còn (redo log) |
+
+### Tài liệu tham khảo
+- [MySQL — InnoDB Transaction Model](https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-model.html)
+- [MySQL — Transaction Isolation Levels](https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🔵 Junior | ACID là gì? Giải thích từng thuộc tính? |
+| 🔵 Junior | `COMMIT` và `ROLLBACK` dùng khi nào? |
+| 🟡 Mid | Kể tên 4 isolation levels? Dirty read, Phantom read là gì? |
+| 🔴 Senior | `REPEATABLE READ` trong InnoDB tránh phantom read bằng cách nào? (Gap lock) |
+
+</details>
+
+---
+
+<details>
+<summary>🟡 <strong>Window Functions & CTEs</strong></summary>
+
+### Định nghĩa
+**Window Functions** (MySQL 8.0+) thực hiện tính toán trên tập hợp dòng liên quan mà không gộp lại (khác GROUP BY). Gồm: ranking (`ROW_NUMBER`, `RANK`, `DENSE_RANK`), phân tích (`LAG`, `LEAD`, `FIRST_VALUE`), tổng hợp (`SUM() OVER()`, `AVG() OVER()`). **CTE** (Common Table Expression) dùng `WITH` để tạo "bảng tạm" trong query, cải thiện khả năng đọc hiểu.
+
+### Ví dụ Code
+```sql
+-- ROW_NUMBER — đánh số thứ tự (xếp hạng doanh thu khách hàng)
+SELECT
+  kh.ten,
+  SUM(dh.tong_tien) AS tong_chi,
+  ROW_NUMBER() OVER (ORDER BY SUM(dh.tong_tien) DESC) AS xep_hang
+FROM khach_hang kh
+INNER JOIN don_hang dh ON kh.id = dh.khach_hang_id
+WHERE dh.trang_thai = 'da_giao'
+GROUP BY kh.id, kh.ten;
+
+-- RANK vs DENSE_RANK — xử lý giá trị bằng nhau
+SELECT
+  ten, gia,
+  RANK() OVER (ORDER BY gia DESC) AS rank_co_nhay,       -- 1, 2, 2, 4 (nhảy số)
+  DENSE_RANK() OVER (ORDER BY gia DESC) AS rank_lien_tuc  -- 1, 2, 2, 3 (liên tục)
+FROM san_pham;
+
+-- PARTITION BY — xếp hạng TRONG TỪNG nhóm
+SELECT
+  danh_muc,
+  ten,
+  gia,
+  ROW_NUMBER() OVER (
+    PARTITION BY danh_muc     -- Chia theo danh mục
+    ORDER BY gia DESC         -- Sắp xếp theo giá giảm dần
+  ) AS hang_trong_danh_muc
+FROM san_pham;
+
+-- LAG / LEAD — so sánh với dòng trước/sau
+SELECT
+  thang,
+  doanh_thu,
+  LAG(doanh_thu, 1) OVER (ORDER BY thang) AS thang_truoc,
+  doanh_thu - LAG(doanh_thu, 1) OVER (ORDER BY thang) AS chenh_lech,
+  ROUND(
+    (doanh_thu - LAG(doanh_thu, 1) OVER (ORDER BY thang))
+    / LAG(doanh_thu, 1) OVER (ORDER BY thang) * 100, 2
+  ) AS phan_tram_tang_truong
+FROM bao_cao_thang;
+
+-- Running Total — tổng tích lũy
+SELECT
+  ngay_dat,
+  tong_tien,
+  SUM(tong_tien) OVER (ORDER BY ngay_dat) AS tong_tich_luy
+FROM don_hang
+WHERE trang_thai = 'da_giao';
+
+-- CTE — Common Table Expression
+WITH doanh_thu_khach AS (
+  SELECT
+    kh.id,
+    kh.ten,
+    SUM(dh.tong_tien) AS tong_chi,
+    COUNT(dh.id) AS so_don
+  FROM khach_hang kh
+  INNER JOIN don_hang dh ON kh.id = dh.khach_hang_id
+  WHERE dh.trang_thai = 'da_giao'
+  GROUP BY kh.id, kh.ten
+),
+phan_hang AS (
+  SELECT *,
+    CASE
+      WHEN tong_chi >= 50000000 THEN 'VIP'
+      WHEN tong_chi >= 10000000 THEN 'Thân thiết'
+      ELSE 'Thường'
+    END AS hang_khach
+  FROM doanh_thu_khach
+)
+SELECT * FROM phan_hang ORDER BY tong_chi DESC;
+
+-- Recursive CTE — tạo dữ liệu phân cấp (cây danh mục)
+WITH RECURSIVE cay_danh_muc AS (
+  -- Base case: danh mục gốc (parent_id IS NULL)
+  SELECT id, ten, parent_id, 0 AS cap, CAST(ten AS CHAR(500)) AS duong_dan
+  FROM danh_muc
+  WHERE parent_id IS NULL
+
+  UNION ALL
+
+  -- Recursive case: danh mục con
+  SELECT dm.id, dm.ten, dm.parent_id, cay.cap + 1,
+    CONCAT(cay.duong_dan, ' > ', dm.ten)
+  FROM danh_muc dm
+  INNER JOIN cay_danh_muc cay ON dm.parent_id = cay.id
+)
+SELECT * FROM cay_danh_muc ORDER BY duong_dan;
+```
+
+### Tài liệu tham khảo
+- [MySQL — Window Functions](https://dev.mysql.com/doc/refman/8.0/en/window-functions.html)
+- [MySQL — WITH (CTE)](https://dev.mysql.com/doc/refman/8.0/en/with.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟡 Mid | `ROW_NUMBER`, `RANK`, `DENSE_RANK` khác nhau thế nào? |
+| 🟡 Mid | `PARTITION BY` trong Window Function dùng để làm gì? |
+| 🟡 Mid | CTE khác subquery ở điểm nào? Khi nào nên dùng CTE? |
+| 🔴 Senior | Recursive CTE hoạt động thế nào? Cho ví dụ thực tế? |
+
+</details>
+
+---
+
+<details>
+<summary>🟡 <strong>Stored Procedures, Triggers & Views</strong></summary>
+
+### Định nghĩa
+**Stored Procedure** là khối code SQL lưu trên server, gọi lại bằng `CALL`. **Trigger** tự động chạy khi INSERT/UPDATE/DELETE xảy ra. **View** là "bảng ảo" dựa trên query, giúp đơn giản hóa truy vấn phức tạp và kiểm soát quyền truy cập. Cả 3 đều giúp tập trung logic ở database layer.
+
+### Ví dụ Code
+```sql
+-- Stored Procedure: xử lý đặt hàng
+DELIMITER //
+
+CREATE PROCEDURE dat_hang(
+  IN p_khach_hang_id INT,
+  IN p_san_pham_id INT,
+  IN p_so_luong INT,
+  OUT p_don_hang_id INT,
+  OUT p_thanh_cong BOOLEAN
+)
+BEGIN
+  DECLARE v_gia DECIMAL(12,2);
+  DECLARE v_ton_kho INT;
+
+  -- Bắt lỗi
+  DECLARE EXIT HANDLER FOR SQLEXCEPTION
+  BEGIN
+    ROLLBACK;
+    SET p_thanh_cong = FALSE;
+  END;
+
+  START TRANSACTION;
+
+  -- Kiểm tra tồn kho (dùng FOR UPDATE để lock dòng)
+  SELECT gia, so_luong INTO v_gia, v_ton_kho
+  FROM san_pham
+  WHERE id = p_san_pham_id
+  FOR UPDATE;
+
+  IF v_ton_kho < p_so_luong THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Không đủ hàng trong kho';
+  END IF;
+
+  -- Tạo đơn hàng
+  INSERT INTO don_hang (khach_hang_id, tong_tien, ngay_dat)
+  VALUES (p_khach_hang_id, v_gia * p_so_luong, NOW());
+  SET p_don_hang_id = LAST_INSERT_ID();
+
+  -- Thêm chi tiết
+  INSERT INTO chi_tiet_don_hang (don_hang_id, san_pham_id, so_luong, don_gia)
+  VALUES (p_don_hang_id, p_san_pham_id, p_so_luong, v_gia);
+
+  -- Trừ tồn kho
+  UPDATE san_pham SET so_luong = so_luong - p_so_luong
+  WHERE id = p_san_pham_id;
+
+  COMMIT;
+  SET p_thanh_cong = TRUE;
+END //
+
+DELIMITER ;
+
+-- Gọi procedure
+CALL dat_hang(1, 1, 2, @don_id, @ok);
+SELECT @don_id, @ok;
+
+-- Trigger: tự động ghi log khi giá sản phẩm thay đổi
+CREATE TABLE lich_su_gia (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  san_pham_id INT,
+  gia_cu DECIMAL(12,2),
+  gia_moi DECIMAL(12,2),
+  nguoi_thay_doi VARCHAR(100),
+  thoi_gian DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER //
+CREATE TRIGGER trg_gia_thay_doi
+BEFORE UPDATE ON san_pham
+FOR EACH ROW
+BEGIN
+  IF OLD.gia <> NEW.gia THEN
+    INSERT INTO lich_su_gia (san_pham_id, gia_cu, gia_moi, nguoi_thay_doi)
+    VALUES (OLD.id, OLD.gia, NEW.gia, CURRENT_USER());
+  END IF;
+END //
+DELIMITER ;
+
+-- View: dashboard tổng quan
+CREATE OR REPLACE VIEW v_bao_cao_ban_hang AS
+SELECT
+  DATE_FORMAT(dh.ngay_dat, '%Y-%m') AS thang,
+  COUNT(DISTINCT dh.id) AS so_don,
+  COUNT(DISTINCT dh.khach_hang_id) AS so_khach,
+  SUM(dh.tong_tien) AS doanh_thu,
+  AVG(dh.tong_tien) AS gia_tri_don_tb
+FROM don_hang dh
+WHERE dh.trang_thai = 'da_giao'
+GROUP BY DATE_FORMAT(dh.ngay_dat, '%Y-%m');
+
+-- Sử dụng view như bảng thường
+SELECT * FROM v_bao_cao_ban_hang WHERE thang >= '2026-01' ORDER BY thang;
+```
+
+### Tài liệu tham khảo
+- [MySQL — Stored Procedures](https://dev.mysql.com/doc/refman/8.0/en/stored-routines.html)
+- [MySQL — Triggers](https://dev.mysql.com/doc/refman/8.0/en/triggers.html)
+- [MySQL — Views](https://dev.mysql.com/doc/refman/8.0/en/views.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🔵 Junior | View là gì? Khác table thường ở điểm nào? |
+| 🟡 Mid | Stored Procedure vs Function — khác nhau thế nào? |
+| 🟡 Mid | Trigger nên và KHÔNG nên dùng khi nào? |
+| 🔴 Senior | Materialized View là gì? MySQL có hỗ trợ không? Workaround? |
+
+</details>
+
+---
+
+<details>
+<summary>🟡 <strong>Isolation Levels & Locking</strong></summary>
+
+### Định nghĩa
+**Isolation Level** quyết định mức độ "nhìn thấy" dữ liệu giữa các transaction đồng thời. MySQL InnoDB hỗ trợ 4 mức: `READ UNCOMMITTED`, `READ COMMITTED`, `REPEATABLE READ` (mặc định), `SERIALIZABLE`. Mức cao hơn = an toàn hơn nhưng chậm hơn. InnoDB dùng **row-level locking** với nhiều loại lock.
+
+### Ví dụ Code
+```sql
+-- Minh họa các vấn đề ở từng isolation level
+
+-- 1. Dirty Read (READ UNCOMMITTED mới bị)
+-- Session A:                           Session B:
+-- BEGIN;                               SET SESSION TRANSACTION ISOLATION LEVEL
+--                                        READ UNCOMMITTED;
+-- UPDATE san_pham SET gia = 999        BEGIN;
+--   WHERE id = 1;                      SELECT gia FROM san_pham WHERE id = 1;
+--                                      -- Thấy 999 (chưa commit!)
+-- ROLLBACK;                            -- Giá thực tế vẫn là cũ → đọc "bẩn"
+
+-- 2. Locking: SELECT ... FOR UPDATE (Pessimistic Lock)
+START TRANSACTION;
+
+-- Lock dòng sản phẩm id=1, transaction khác phải đợi
+SELECT so_luong FROM san_pham WHERE id = 1 FOR UPDATE;
+
+-- Xử lý logic kiểm tra tồn kho...
+UPDATE san_pham SET so_luong = so_luong - 1 WHERE id = 1;
+
+COMMIT; -- Giải phóng lock
+
+-- 3. Locking: SELECT ... LOCK IN SHARE MODE (Shared Lock)
+START TRANSACTION;
+
+-- Nhiều transaction có thể đọc cùng lúc, nhưng không ai được UPDATE
+SELECT * FROM san_pham WHERE id = 1 LOCK IN SHARE MODE;
+
+COMMIT;
+
+-- 4. Gap Lock (REPEATABLE READ) — ngăn phantom read
+-- InnoDB lock cả "khoảng trống" giữa các giá trị index
+START TRANSACTION;
+SELECT * FROM san_pham WHERE gia BETWEEN 100000 AND 200000 FOR UPDATE;
+-- Lock tất cả dòng có giá 100k-200k VÀ lock "gap" để
+-- transaction khác không thể INSERT giá trong khoảng này
+COMMIT;
+
+-- Kiểm tra locks đang hoạt động (MySQL 8.0+)
+SELECT * FROM performance_schema.data_locks;
+SELECT * FROM performance_schema.data_lock_waits;
+
+-- Phát hiện deadlock
+SHOW ENGINE INNODB STATUS\G
+-- Tìm phần "LATEST DETECTED DEADLOCK"
+```
+
+### Bảng so sánh Isolation Levels
+
+| Level | Dirty Read | Non-Repeatable Read | Phantom Read | Performance |
+|-------|-----------|-------------------|-------------|-------------|
+| READ UNCOMMITTED | ⚠️ Có | ⚠️ Có | ⚠️ Có | Nhanh nhất |
+| READ COMMITTED | ✅ Không | ⚠️ Có | ⚠️ Có | Nhanh |
+| REPEATABLE READ | ✅ Không | ✅ Không | ✅ Không* | Trung bình |
+| SERIALIZABLE | ✅ Không | ✅ Không | ✅ Không | Chậm nhất |
+
+*InnoDB dùng gap lock để ngăn phantom read ở REPEATABLE READ
+
+### Tài liệu tham khảo
+- [MySQL — InnoDB Locking](https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html)
+- [MySQL — Isolation Levels](https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟡 Mid | Dirty Read, Non-Repeatable Read, Phantom Read là gì? |
+| 🟡 Mid | `FOR UPDATE` và `LOCK IN SHARE MODE` khác nhau thế nào? |
+| 🔴 Senior | Gap Lock hoạt động thế nào? Tại sao InnoDB cần nó? |
+| 🔴 Senior | Deadlock xảy ra khi nào? Cách phòng tránh? |
+
+</details>
+
+---
+
+<details>
+<summary>🔴 <strong>Replication, Sharding & Partitioning</strong></summary>
+
+### Định nghĩa
+**Replication** sao chép dữ liệu từ source (master) sang replica (slave) — giúp đọc phân tải, backup, high availability. **Sharding** chia dữ liệu theo chiều ngang (mỗi shard chứa một phần data) — giải quyết vấn đề scale. **Partitioning** chia bảng lớn thành nhiều phần nhỏ hơn trong cùng 1 server — cải thiện query trên bảng hàng triệu dòng.
+
+### Ví dụ Code
+```sql
+-- ==========================================
+-- PARTITIONING — chia bảng trong cùng server
+-- ==========================================
+
+-- RANGE Partition — chia theo khoảng giá trị (phổ biến nhất cho time-series)
+CREATE TABLE don_hang_log (
+  id BIGINT AUTO_INCREMENT,
+  ngay_dat DATE NOT NULL,
+  khach_hang_id INT NOT NULL,
+  tong_tien DECIMAL(12,2),
+  PRIMARY KEY (id, ngay_dat)         -- Partition key phải nằm trong PK
+) PARTITION BY RANGE (YEAR(ngay_dat)) (
+  PARTITION p2024 VALUES LESS THAN (2025),
+  PARTITION p2025 VALUES LESS THAN (2026),
+  PARTITION p2026 VALUES LESS THAN (2027),
+  PARTITION p_future VALUES LESS THAN MAXVALUE
+);
+
+-- Query chỉ quét partition cần thiết (partition pruning)
+EXPLAIN SELECT * FROM don_hang_log WHERE ngay_dat >= '2026-01-01';
+-- Chỉ quét p2026 và p_future, bỏ qua p2024, p2025
+
+-- Quản lý partition
+ALTER TABLE don_hang_log ADD PARTITION (
+  PARTITION p2027 VALUES LESS THAN (2028)
+);
+ALTER TABLE don_hang_log DROP PARTITION p2024; -- Xóa data cũ cực nhanh
+
+-- LIST Partition — chia theo danh sách giá trị
+CREATE TABLE don_hang_vung (
+  id BIGINT AUTO_INCREMENT,
+  vung VARCHAR(10) NOT NULL,
+  tong_tien DECIMAL(12,2),
+  PRIMARY KEY (id, vung)
+) PARTITION BY LIST COLUMNS (vung) (
+  PARTITION p_bac VALUES IN ('HN', 'HP', 'HD'),
+  PARTITION p_trung VALUES IN ('DN', 'HUE', 'QN'),
+  PARTITION p_nam VALUES IN ('HCM', 'BD', 'CT')
+);
+
+-- ==========================================
+-- REPLICATION — cấu hình cơ bản
+-- ==========================================
+
+-- Trên Source (Master) — my.cnf
+-- [mysqld]
+-- server-id=1
+-- log_bin=mysql-bin
+-- binlog_format=ROW
+-- gtid_mode=ON
+-- enforce_gtid_consistency=ON
+
+-- Tạo user replication trên Source
+CREATE USER 'repl_user'@'%' IDENTIFIED BY 'StrongPassword123';
+GRANT REPLICATION SLAVE ON *.* TO 'repl_user'@'%';
+
+-- Trên Replica (Slave) — my.cnf
+-- [mysqld]
+-- server-id=2
+-- read_only=ON
+-- relay_log=relay-bin
+
+-- Cấu hình replica kết nối source
+CHANGE REPLICATION SOURCE TO
+  SOURCE_HOST='master_ip',
+  SOURCE_USER='repl_user',
+  SOURCE_PASSWORD='StrongPassword123',
+  SOURCE_AUTO_POSITION=1;    -- Dùng GTID
+
+START REPLICA;
+SHOW REPLICA STATUS\G
+
+-- ==========================================
+-- SHARDING — thiết kế ở application layer
+-- ==========================================
+-- MySQL không hỗ trợ sharding tự động.
+-- Dùng middleware: Vitess, ProxySQL, ShardingSphere
+-- Hoặc implement ở application code:
+
+-- Shard key: khach_hang_id
+-- Shard 0: khach_hang_id % 4 == 0  →  db_shard_0
+-- Shard 1: khach_hang_id % 4 == 1  →  db_shard_1
+-- Shard 2: khach_hang_id % 4 == 2  →  db_shard_2
+-- Shard 3: khach_hang_id % 4 == 3  →  db_shard_3
+
+-- Mỗi shard có cùng schema nhưng chứa data khác nhau
+```
+
+### So sánh Partitioning vs Sharding
+
+| Tiêu chí | Partitioning | Sharding |
+|----------|-------------|---------|
+| Phạm vi | 1 server, 1 bảng | Nhiều server |
+| Trong suốt | Transparent (query bình thường) | Application phải biết shard nào |
+| Scale | Vertical (giới hạn 1 máy) | Horizontal (thêm máy vô hạn) |
+| Phức tạp | Thấp | Rất cao (cross-shard queries, rebalancing) |
+| Use case | Bảng lớn, time-series, archive | Hệ thống lớn, hàng tỷ records |
+
+### Tài liệu tham khảo
+- [MySQL — Partitioning](https://dev.mysql.com/doc/refman/8.0/en/partitioning.html)
+- [MySQL — Replication](https://dev.mysql.com/doc/refman/8.0/en/replication.html)
+- [Vitess — MySQL Sharding](https://vitess.io/docs/)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟡 Mid | Partitioning là gì? RANGE vs LIST vs HASH? |
+| 🔴 Senior | Master-Slave replication lag xử lý thế nào? |
+| 🔴 Senior | Sharding key nên chọn dựa trên tiêu chí gì? |
+| 🔴 Senior | Cross-shard JOIN giải quyết ra sao? Trade-offs? |
+
+</details>
+
+---
+
+<details>
+<summary>🔴 <strong>Performance Tuning & Monitoring</strong></summary>
+
+### Định nghĩa
+MySQL performance tuning bao gồm: tối ưu query (EXPLAIN, slow query log), cấu hình server (buffer pool, connections), thiết kế schema (index, normalization), và monitoring (PMM, sys schema). Tuning đúng cách có thể cải thiện throughput 10-100x mà không cần thêm hardware.
+
+### Ví dụ Code
+```sql
+-- ==========================================
+-- SLOW QUERY LOG — phát hiện query chậm
+-- ==========================================
+
+-- Bật slow query log
+SET GLOBAL slow_query_log = 'ON';
+SET GLOBAL long_query_time = 1;           -- Log query > 1 giây
+SET GLOBAL log_queries_not_using_indexes = 'ON';  -- Log query không dùng index
+
+-- Xem slow query log
+-- mysqldumpslow -s t /var/log/mysql/slow.log
+
+-- ==========================================
+-- PERFORMANCE SCHEMA & SYS SCHEMA
+-- ==========================================
+
+-- Top 10 query chậm nhất (theo tổng thời gian)
+SELECT
+  DIGEST_TEXT AS query_pattern,
+  COUNT_STAR AS so_lan_chay,
+  ROUND(SUM_TIMER_WAIT / 1e12, 2) AS tong_thoi_gian_s,
+  ROUND(AVG_TIMER_WAIT / 1e12, 4) AS trung_binh_s,
+  SUM_ROWS_EXAMINED AS tong_dong_quet,
+  SUM_ROWS_SENT AS tong_dong_tra_ve
+FROM performance_schema.events_statements_summary_by_digest
+ORDER BY SUM_TIMER_WAIT DESC
+LIMIT 10;
+
+-- Bảng nào bị đọc/ghi nhiều nhất
+SELECT * FROM sys.schema_table_statistics
+ORDER BY total_latency DESC LIMIT 10;
+
+-- Index nào không được dùng (nên xóa)
+SELECT * FROM sys.schema_unused_indexes
+WHERE object_schema NOT IN ('mysql', 'sys', 'performance_schema');
+
+-- Index bị trùng lặp
+SELECT * FROM sys.schema_redundant_indexes;
+
+-- ==========================================
+-- CẤU HÌNH SERVER — my.cnf quan trọng
+-- ==========================================
+
+-- [mysqld]
+-- # Buffer Pool — QUAN TRỌNG NHẤT (70-80% RAM cho dedicated MySQL server)
+-- innodb_buffer_pool_size = 8G           # RAM: 12GB → Buffer Pool: 8GB
+-- innodb_buffer_pool_instances = 8       # Chia thành 8 instance (giảm contention)
+--
+-- # Redo Log — ảnh hưởng write performance
+-- innodb_log_file_size = 1G
+-- innodb_flush_log_at_trx_commit = 1     # 1: ACID đầy đủ, 2: nhanh hơn (có rủi ro)
+--
+-- # Connections
+-- max_connections = 200
+-- wait_timeout = 300                     # Đóng connection idle sau 5 phút
+--
+-- # Query Cache (đã bị remove trong MySQL 8.0)
+-- # Dùng ProxySQL hoặc Redis thay thế
+
+-- Kiểm tra các biến quan trọng
+SHOW VARIABLES LIKE 'innodb_buffer_pool_size';
+SHOW VARIABLES LIKE 'max_connections';
+
+-- Kiểm tra Buffer Pool hit ratio (nên > 99%)
+SHOW STATUS LIKE 'Innodb_buffer_pool_read%';
+-- Hit ratio = 1 - (Innodb_buffer_pool_reads / Innodb_buffer_pool_read_requests)
+
+-- ==========================================
+-- BACKUP & RECOVERY
+-- ==========================================
+
+-- Logical backup (nhỏ, chậm, portable)
+-- mysqldump --single-transaction --routines --triggers shop_db > backup.sql
+
+-- Physical backup (nhanh, dùng cho DB lớn)
+-- xtrabackup --backup --target-dir=/backup/full
+
+-- Point-in-Time Recovery
+-- mysqlbinlog --start-datetime="2026-05-30 10:00:00" binlog.000003 | mysql
+```
+
+### Checklist Performance Tuning
+
+| Ưu tiên | Hạng mục | Kiểm tra |
+|---------|---------|---------|
+| 1 | Slow Query Log | Bật chưa? Query nào > 1s? |
+| 2 | EXPLAIN | Query quan trọng nhất có type=ALL không? |
+| 3 | Index | Composite index đúng thứ tự? Có index thừa? |
+| 4 | Buffer Pool | Hit ratio > 99%? Size = 70-80% RAM? |
+| 5 | Connections | Max connections phù hợp? Connection pooling? |
+| 6 | Schema | Đúng data type? Normalization hợp lý? |
+| 7 | Replication | Read replica cho read-heavy workload? |
+
+### Tài liệu tham khảo
+- [MySQL — Performance Schema](https://dev.mysql.com/doc/refman/8.0/en/performance-schema.html)
+- [MySQL — Server System Variables](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html)
+- [Percona Monitoring and Management (PMM)](https://www.percona.com/software/database-tools/percona-monitoring-and-management)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🟡 Mid | Slow query log dùng thế nào? Threshold bao nhiêu là hợp lý? |
+| 🔴 Senior | `innodb_buffer_pool_size` nên set bao nhiêu? Tại sao? |
+| 🔴 Senior | `innodb_flush_log_at_trx_commit` = 0, 1, 2 khác nhau thế nào? Trade-off? |
+| 🔴 Senior | Làm sao phát hiện và xử lý query N+1 ở database layer? |
+
+</details>
+
+---
+
+<details>
+<summary>🔴 <strong>MySQL với Spring Boot (JPA/Hibernate)</strong></summary>
+
+### Định nghĩa
+Trong stack Java + Spring Boot, MySQL thường được truy cập qua **JPA/Hibernate**. Hiểu cách Hibernate tạo SQL, quản lý cache (L1, L2), xử lý lazy loading, và mapping quan hệ (OneToMany, ManyToMany) là cần thiết để tránh các vấn đề performance phổ biến: N+1 queries, unnecessary joins, overfetching.
+
+### Ví dụ Code
+```java
+// Entity mapping — JPA annotations map Java class → MySQL table
+@Entity
+@Table(name = "san_pham", indexes = {
+    @Index(name = "idx_danh_muc_gia", columnList = "danh_muc, gia")
+})
+public class SanPham {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "ma_sp", length = 20, unique = true, nullable = false)
+    private String maSp;
+
+    @Column(nullable = false)
+    private String ten;
+
+    @Column(precision = 12, scale = 2)
+    private BigDecimal gia;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private DanhMuc danhMuc;
+
+    @Column(name = "ngay_tao", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime ngayTao;
+
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
+    private List<ChiTietDonHang> chiTiet = new ArrayList<>();
+}
+
+// Repository — Spring Data JPA tự tạo SQL
+public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
+
+    // Derived query — Spring tạo SQL từ tên method
+    List<SanPham> findByDanhMucAndGiaBetween(
+        DanhMuc danhMuc, BigDecimal giaMin, BigDecimal giaMax);
+    // → SELECT * FROM san_pham WHERE danh_muc = ? AND gia BETWEEN ? AND ?
+
+    // JPQL custom query
+    @Query("SELECT sp FROM SanPham sp WHERE sp.danhMuc = :dm ORDER BY sp.gia DESC")
+    List<SanPham> timTheoDanhMuc(@Param("dm") DanhMuc danhMuc);
+
+    // Native SQL query
+    @Query(value = """
+        SELECT danh_muc, COUNT(*) as so_luong, AVG(gia) as gia_tb
+        FROM san_pham
+        GROUP BY danh_muc
+        HAVING COUNT(*) >= :minCount
+        """, nativeQuery = true)
+    List<Object[]> thongKeTheoDanhMuc(@Param("minCount") int minCount);
+
+    // ✅ Fix N+1: EntityGraph
+    @EntityGraph(attributePaths = {"chiTiet", "chiTiet.donHang"})
+    @Query("SELECT sp FROM SanPham sp WHERE sp.danhMuc = :dm")
+    List<SanPham> timVoiChiTiet(@Param("dm") DanhMuc danhMuc);
+}
+
+// application.yml — MySQL config
+// spring:
+//   datasource:
+//     url: jdbc:mysql://localhost:3306/shop_db?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh
+//     username: root
+//     password: secret
+//     hikari:
+//       maximum-pool-size: 20        # Connection pool
+//       minimum-idle: 5
+//       connection-timeout: 30000
+//   jpa:
+//     hibernate:
+//       ddl-auto: validate           # Production: validate (không tự sửa schema)
+//     properties:
+//       hibernate:
+//         dialect: org.hibernate.dialect.MySQLDialect
+//         format_sql: true
+//         generate_statistics: true   # Log performance stats
+//         default_batch_fetch_size: 100  # Fix N+1 cho lazy loading
+```
+
+### Tài liệu tham khảo
+- [Spring Data JPA Reference](https://docs.spring.io/spring-data/jpa/reference/)
+- [Hibernate — MySQL Dialect](https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html)
+
+### Câu hỏi phỏng vấn
+
+| Cấp độ | Câu hỏi |
+|--------|---------|
+| 🔵 Junior | `ddl-auto` có những giá trị nào? Production nên dùng gì? |
+| 🟡 Mid | N+1 query problem là gì? Hibernate giải quyết bằng cách nào? |
+| 🔴 Senior | Hibernate L1 Cache và L2 Cache khác nhau thế nào? |
+| 🔴 Senior | Connection Pool (HikariCP) tuning: `maximum-pool-size` nên set bao nhiêu? |
+
+</details>
+
+---
+
+
 ## Phần 4 — Bảng tổng hợp Phỏng vấn
 
 ### Java Core
@@ -2617,6 +3846,39 @@ jobs:
 | 🔴 Senior | DevOps | Blue-Green vs Canary deployment? | Rất khó |
 | 🔴 Senior | DevOps | GraalVM native image — ưu nhược? | Rất khó |
 
+### MySQL
+
+| Cấp độ | Nhóm chủ đề | Câu hỏi | Độ khó |
+|--------|-------------|---------|--------|
+| 🟢 Fresher | Data Types | `VARCHAR` và `TEXT` khác nhau thế nào? | Dễ |
+| 🟢 Fresher | Data Types | `DECIMAL` vs `FLOAT` — lưu tiền dùng kiểu gì? | Dễ |
+| 🟢 Fresher | CRUD | `WHERE` và `HAVING` khác nhau thế nào? | Dễ |
+| 🟢 Fresher | CRUD | `DELETE` và `TRUNCATE` khác nhau thế nào? | Dễ |
+| 🟢 Fresher | JOINs | Phân biệt `INNER JOIN`, `LEFT JOIN`, `RIGHT JOIN`? | Dễ |
+| 🟢 Fresher | Keys | Primary Key và Foreign Key khác nhau thế nào? | Dễ |
+| 🔵 Junior | Index | Index là gì? Tại sao không đánh index tất cả cột? | TB |
+| 🔵 Junior | Index | Composite index và leftmost prefix rule? | TB |
+| 🔵 Junior | Normalization | Giải thích 1NF, 2NF, 3NF? | TB |
+| 🔵 Junior | Transaction | ACID là gì? Giải thích từng thuộc tính? | TB |
+| 🔵 Junior | FK | `ON DELETE CASCADE` vs `SET NULL`? | TB |
+| 🔵 Junior | JOINs | Self JOIN là gì? Cho ví dụ? | TB |
+| 🟡 Mid | Window | `ROW_NUMBER`, `RANK`, `DENSE_RANK` khác nhau? | Khó |
+| 🟡 Mid | CTE | CTE khác subquery ở điểm nào? | Khó |
+| 🟡 Mid | Index | Covering index là gì? Tại sao nhanh hơn? | Khó |
+| 🟡 Mid | Isolation | Dirty Read, Non-Repeatable Read, Phantom Read? | Khó |
+| 🟡 Mid | Procedure | Stored Procedure vs Function — khác nhau? | Khó |
+| 🟡 Mid | Normalization | Khi nào nên denormalize? Trade-off? | Khó |
+| 🟡 Mid | Partition | Partitioning là gì? RANGE vs LIST vs HASH? | Khó |
+| 🔴 Senior | Locking | Gap Lock hoạt động thế nào? | Rất khó |
+| 🔴 Senior | Locking | Deadlock xảy ra khi nào? Cách phòng tránh? | Rất khó |
+| 🔴 Senior | Replication | Master-Slave replication lag xử lý thế nào? | Rất khó |
+| 🔴 Senior | Sharding | Sharding key nên chọn dựa trên tiêu chí gì? | Rất khó |
+| 🔴 Senior | Tuning | `innodb_buffer_pool_size` nên set bao nhiêu? | Rất khó |
+| 🔴 Senior | Tuning | `innodb_flush_log_at_trx_commit` = 0, 1, 2 trade-off? | Rất khó |
+| 🔴 Senior | JPA | N+1 query problem — cách phát hiện và fix? | Rất khó |
+| 🔴 Senior | CTE | Recursive CTE hoạt động thế nào? | Rất khó |
+
+
 ---
 
 ## Tài nguyên tham khảo
@@ -2629,6 +3891,16 @@ jobs:
 - [Spring Data JPA Reference](https://docs.spring.io/spring-data/jpa/reference/)
 - [Spring Security Reference](https://docs.spring.io/spring-security/reference/)
 - [Spring Cloud Documentation](https://spring.io/projects/spring-cloud)
+
+
+### MySQL & Database
+- [MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/)
+- [MySQL Tutorial — mysqltutorial.org](https://www.mysqltutorial.org/)
+- [Use The Index, Luke — SQL Performance](https://use-the-index-luke.com/)
+- [Percona Blog](https://www.percona.com/blog/) — MySQL performance insights
+- [roadmap.sh — SQL](https://roadmap.sh/sql)
+- [LeetCode — SQL Problems](https://leetcode.com/problemset/database/)
+- [Vitess — MySQL Sharding](https://vitess.io/)
 
 ### Roadmap & Learning Path
 - [roadmap.sh — Java Developer](https://roadmap.sh/java)
@@ -2650,4 +3922,4 @@ jobs:
 
 ---
 
-> 📅 Cập nhật: Tháng 5/2026 | Phiên bản: Java 21 LTS + Spring Boot 3.x
+> 📅 Cập nhật: Tháng 5/2026 | Phiên bản: Java 21 LTS + Spring Boot 3.x + MySQL 8.0
